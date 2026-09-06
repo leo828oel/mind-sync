@@ -1,0 +1,25 @@
+{
+  "name": "MIND SYNC",
+  "short_name": "MIND SYNC",
+  "description": "이모티콘으로 AI와 타이밍을 맞추는 카드 게임",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080a15",
+  "theme_color": "#080a15",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

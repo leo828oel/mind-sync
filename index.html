@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MIND SYNC</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080a15;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+#app{max-width:430px;min-height:100vh;margin:auto;padding:18px;background:linear-gradient(160deg,#17153a,#080a15)}
+.screen{display:none}.active{display:block}
+.top{display:flex;justify-content:space-between}.pill{padding:8px 12px;background:#191c31;border:1px solid #343953;border-radius:20px}
+h1{font-size:48px;line-height:.9;margin:80px 0 10px}.grad{background:linear-gradient(90deg,#9b7cff,#ff7272);color:transparent;background-clip:text}
+.sub{color:#aeb4ca;line-height:1.7}.btn{width:100%;padding:17px;margin-top:12px;border:0;border-radius:16px;background:#292e49;color:#fff;font-weight:800;font-size:16px}.primary{background:linear-gradient(100deg,#6145ff,#ff5e76)}
+.panel{margin-top:20px;padding:16px;border-radius:20px;background:#111426;border:1px solid #2b304a}.ais{display:flex;justify-content:space-between}.ai{text-align:center}.av{font-size:34px}.bubble{margin-top:5px;background:#e9eaf0;color:#171927;border-radius:12px;padding:6px 10px;font-size:23px}.now{text-align:center;margin:18px 0;padding:14px;border:1px solid #2b304a;border-radius:14px}.now b{display:block;font-size:32px;margin-top:4px}.emojis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.emoji{padding:12px 4px;background:#15182b;border:1px solid #303550;border-radius:12px;text-align:center;font-size:27px}.emoji small{display:block;color:#aab0c4;font-size:10px;margin-top:4px}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.card{height:85px;background:#15182b;border:1px solid #5b607c;border-radius:10px;color:#fff;font-size:21px;font-weight:900}.card:disabled{opacity:.25}.result{text-align:center}.big{font-size:65px}
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080a15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MIND SYNC">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+</head>
+<body>
+<div id="app">
+<section id="home" class="screen active">
+<div class="top"><div class="pill">👑 LV. 1</div><div class="pill">⚙️</div></div>
+<h1>MIND<br><span class="grad">SYNC</span></h1>
+<p class="sub">이모티콘으로 통하는 순간,<br>우리는 하나가 된다.</p>
+<button id="start" class="btn primary">▶ 게임 시작</button>
+<button id="tutorial" class="btn">📖 튜토리얼</button>
+</section>
+
+<section id="game" class="screen">
+<div class="top"><button id="back" class="btn" style="width:auto;padding:9px 14px;margin:0">‹</button><div class="pill">LEVEL 1</div><div class="pill">❤️ 3</div></div>
+<div class="panel">
+<div class="ais"><div class="ai"><div class="av">🤖</div><b>신중형</b><div id="b1" class="bubble">👀</div></div><div class="ai"><div class="av">👾</div><b>변칙형</b><div id="b2" class="bubble">🔥</div></div></div>
+<div class="now">지금까지 나온 카드<b id="now">0</b></div>
+<div class="emojis">
+<button class="emoji" data-e="🐢">🐢<small>아직 멀었음</small></button>
+<button class="emoji" data-e="👀">👀<small>보고 있어</small></button>
+<button class="emoji" data-e="🤔">🤔<small>고민 중</small></button>
+<button class="emoji" data-e="⏳">⏳<small>기다리는 중</small></button>
+<button class="emoji" data-e="😰">😰<small>위험해</small></button>
+<button class="emoji" data-e="🔥">🔥<small>곧 낼 것 같아</small></button>
+</div>
+<h3>내 카드</h3><div id="cards" class="cards"></div>
+</div>
+</section>
+
+<section id="result" class="screen">
+<div class="panel result"><div class="big">🏆</div><h1 style="margin:10px 0;font-size:36px">성공!</h1><p class="sub">모든 카드를 순서대로 냈어요.</p><h2>+100점</h2><button id="again" class="btn primary">다시 하기</button><button id="home" class="btn">메인으로</button></div>
+</section>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let hand=[],current=0;
+function screen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active')}
+function start(){hand=[12,27,33,45,56];current=0;$('now').textContent=0;render();screen('game')}
+function render(){const box=$('cards');box.innerHTML='';hand.forEach(n=>{const b=document.createElement('button');b.className='card';b.textContent=n;b.disabled=n<=current;b.onclick=()=>play(n);box.appendChild(b)})}
+function play(n){if(n!==Math.min(...hand.filter(x=>x>current))){alert('순서가 틀렸어요!');return}current=n;hand=hand.filter(x=>x!==n);$('now').textContent=n;render();if(!hand.length)screen('result')}
+$('start').onclick=start;$('again').onclick=start;$('home').onclick=()=>screen('home');$('back').onclick=()=>screen('home');
+$('tutorial').onclick=()=>alert('가장 작은 숫자부터 순서대로 카드를 내세요. AI의 이모티콘을 보고 타이밍을 맞추는 게임입니다!');
+document.querySelectorAll('.emoji').forEach(b=>b.onclick=()=>{const e=b.dataset.e;Math.random()>.5?$('b1').textContent=e:$('b2').textContent=e});
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+}
+</script>
+</body>
+</html>
