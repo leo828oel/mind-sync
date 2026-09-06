@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080a15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MIND SYNC</title>
+<link rel="manifest" href="./manifest.json">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#11132d,#070915);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;min-height:100vh}
+.wrap{min-height:100vh;padding:28px 24px 40px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center}
+.badge,.gear{background:#202342;border:1px solid #44476a;border-radius:40px;padding:12px 18px;font-size:18px}
+.gear{width:58px;height:58px;padding:0;display:grid;place-items:center;font-size:25px}
+h1{font-size:64px;line-height:.9;margin:150px 0 35px;letter-spacing:-3px}
+h1 span{background:linear-gradient(90deg,#7850ff,#ff6b8b);-webkit-background-clip:text;color:transparent}
+.sub{font-size:20px;line-height:1.7;color:#c5c7d8;margin-bottom:58px}
+button{border:0;color:#fff;font:inherit;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.primary{width:100%;height:72px;border-radius:28px;background:linear-gradient(90deg,#6840ff,#ff5e7d);font-size:24px;margin-bottom:18px}
+.secondary{width:100%;height:72px;border-radius:28px;background:#292e4d;font-size:22px}
+.screen{display:none}
+.screen.active{display:block}
+.title{font-size:32px;margin:55px 0 20px}
+.card-area{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}
+.card{width:72px;height:100px;border-radius:14px;background:#fff;color:#15172b;display:grid;place-items:center;font-size:28px;font-weight:800}
+.ai{background:#202442;border-radius:20px;padding:18px;margin:12px 0}
+.ai b{font-size:19px}
+.emojis{display:flex;gap:10px;margin:25px 0}
+.emoji{background:#292e4d;border-radius:18px;padding:14px 16px;font-size:27px}
+.back{background:#292e4d;border-radius:18px;padding:16px;width:100%;font-size:18px}
+.msg{color:#c7c9d8;min-height:28px;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="home" class="screen active">
+    <div class="top"><div class="badge">👑 LV. 1</div><button class="gear" type="button">⚙️</button></div>
+    <h1>MIND<br><span>SYNC</span></h1>
+    <div class="sub">이모티콘으로 통하는 순간,<br>우리는 하나가 된다.</div>
+    <button id="startBtn" class="primary" type="button">▶ 게임 시작</button>
+    <button id="tutorialBtn" class="secondary" type="button">📖 튜토리얼</button>
+  </section>
+
+  <section id="game" class="screen">
+    <div class="top"><div class="badge">🎮 LEVEL 1</div><button id="homeBtn" class="gear" type="button">×</button></div>
+    <div class="title">카드를 순서대로 맞춰!</div>
+    <div class="ai"><b>🤖 신중형 AI</b><div class="msg" id="ai1">준비 완료 👀</div></div>
+    <div class="ai"><b>🤖 변칙형 AI</b><div class="msg" id="ai2">타이밍을 보고 있어 😏</div></div>
+    <div class="card-area" id="cards"></div>
+    <div class="msg" id="status">이모티콘으로 타이밍을 알려줘.</div>
+    <div class="emojis">
+      <button class="emoji" data-e="👀" type="button">👀</button>
+      <button class="emoji" data-e="👍" type="button">👍</button>
+      <button class="emoji" data-e="⏳" type="button">⏳</button>
+      <button class="emoji" data-e="🔥" type="button">🔥</button>
+    </div>
+    <button id="finishBtn" class="primary" type="button">카드 내기</button>
+    <button id="gameHomeBtn" class="back" type="button">← 처음으로</button>
+  </section>
+
+  <section id="result" class="screen">
+    <div class="top"><div class="badge">🏆 RESULT</div></div>
+    <div class="title">SYNC 성공!</div>
+    <div class="sub">AI와 타이밍을 맞췄어.<br>다음 레벨에 도전해보자!</div>
+    <button id="againBtn" class="primary" type="button">▶ 다시 플레이</button>
+    <button id="resultHomeBtn" class="back" type="button">← 처음으로</button>
+  </section>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const screens = ["home","game","result"];
+  function show(id){
+    screens.forEach(x => $(x).classList.toggle("active", x === id));
+    window.scrollTo(0,0);
+  }
+  function startGame(){
+    const cards = $("cards");
+    cards.innerHTML = "";
+    [3,7,12,18].forEach(n=>{
+      const d=document.createElement("div");
+      d.className="card"; d.textContent=n; cards.appendChild(d);
+    });
+    $("status").textContent="준비됐어. 이모티콘으로 신호를 보내봐!";
+    $("ai1").textContent="👀 집중 중";
+    $("ai2").textContent="🤔 기다리는 중";
+    show("game");
+  }
+  $("startBtn").addEventListener("click", startGame);
+  $("tutorialBtn").addEventListener("click", ()=>alert("숫자 카드를 순서대로 맞추는 게임이야. 글 대신 이모티콘으로 타이밍을 전달해!"));
+  $("homeBtn").addEventListener("click", ()=>show("home"));
+  $("gameHomeBtn").addEventListener("click", ()=>show("home"));
+  $("resultHomeBtn").addEventListener("click", ()=>show("home"));
+  $("againBtn").addEventListener("click", startGame);
+  $("finishBtn").addEventListener("click", ()=>{
+    $("status").textContent="완벽해! AI와 싱크가 맞았어 🎉";
+    show("result");
+  });
+  document.querySelectorAll(".emoji").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const e=btn.dataset.e;
+      $("status").textContent="보낸 신호: "+e;
+      $("ai1").textContent="신호 확인 "+e;
+      $("ai2").textContent="타이밍 계산 중…";
+    });
+  });
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  }
+})();
+</script>
+</body>
+</html>
